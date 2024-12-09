@@ -1,0 +1,76 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+<div class="row ">
+     <!-- User and Shipping Info Form -->
+     <div class="col-lg-6 mb-4" style=" border: 2px solid #ccc; padding: 10px; ">
+         <div class="box-element" id="form-wrapper" style="display: flex; font-weight: bold; padding: 10px 0; border-bottom: 2px solid #ddd;">
+             <form id="form">
+                 <div id="user-info">
+                     <div class="form-field">
+                         <input required class="form-control" type="text" name="name" placeholder="Name..">
+                     </div>
+                     <div class="form-field" style="display: flex; font-weight: bold; padding: 10px 0;"> 
+                         <input required class="form-control" type="email" name="email" placeholder="Email..">
+                     </div>
+                 </div>
+                 
+                 <div id="shipping-info" >
+                     <hr>
+                     <p>Shipping Information:</p>
+                     <hr>
+                     <div class="form-field" style="display: flex; font-weight: bold; padding: 10px 0; ">
+                         <input class="form-control" type="text" name="address" placeholder="Address..">
+                     </div>
+                     <div class="form-field" style="display: flex; flex-direction: row; font-weight: bold; padding: 10px 0; ">
+                         <input class="form-control" type="text" name="city" placeholder="City..">
+                     </div>
+                     <div class="form-field" style="display: flex; font-weight: bold; padding: 10px 0; ">
+                         <input class="form-control" type="text" name="state" placeholder="State..">
+                     </div>
+                     
+                     <div class="form-field" style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
+                         <input class="form-control" type="text" name="country" placeholder="Country..">
+                     </div>
+                 </div>
+
+                 <hr>
+                 <input id="form-button" class="btn btn-success btn-block" type="submit" value="Continue">
+             </form>
+         </div>
+
+         <br>
+         <div class="box-element"; id="payment-info" style=" border: 2px solid #ccc; padding: 10px;" >
+             <small>Paypal Options</small>
+         </div>
+     </div>
+
+     <!-- Order Summary -->
+     <div class="col-lg-6 mb-5" style=" border: 2px solid #ccc; padding: 10px;">
+         <div class="box-element">
+             <a class="btn btn-outline-dark" href="{% url 'cart' %}">&#x2190; Back to Cart</a>
+             <hr>
+             <h3>Order Summary</h3>             
+			 <hr>
+              {%for item in items%}
+               <div class="cart-row" style="display: flex; align-items: center; padding: 15px 0; border-bottom: 1px solid #ddd;">
+               <!-- Image -->
+               <div style="flex: 2;">
+                   <img class="img-fluid" src="{{item.product.imageURL}}" alt="Product" style="width: 80px; height: 80px; object-fit: cover; border: 1px solid #ddd; border-radius: 5px;">
+                <div style="flex:2"><p>{{item.product.name}}</p></div>
+		        <div style="flex:1"><p>${{item.product.price|floatformat:2}}</p></div>
+		        <div style="flex:1"><p>x{{item.quantity}}</p></div>
+	
+	
+               </div>
+               </div>
+               {%endfor%}
+
+				<h5>Items:{{order.get_cart_items}}</h5>
+				<h5>Total:Rs.{{order.get_cart_total}}</h5>
+               
+			
+		</div>
+	</div>
+</div>
+{% endblock content %}
