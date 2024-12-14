@@ -23,7 +23,7 @@
         <!-- Cart Items -->
         <div class="box-element">
             <!-- Header Row -->
-            <div class="cart-row header" style="display: flex; font-weight: bold; padding: 10px 0; border-bottom: 2px solid #ddd;">
+            <div class="cart-row " style="display: flex; font-weight: bold; padding: 10px 0; border-bottom: 2px solid #ddd;">
                 <div style="flex: 2;"></div>
                 <div style="flex: 2;">Item</div>
                 <div style="flex: 1; text-align: center;">Price</div>
@@ -32,7 +32,7 @@
             </div>
 
             <!-- Product Row -->
-             {%for item in items%}
+            {%for item in items%}
             <div class="cart-row" style="display: flex; align-items: center; padding: 15px 0; border-bottom: 1px solid #ddd;">
                 <!-- Image -->
                 <div style="flex: 2;">
@@ -52,6 +52,7 @@
                 <!-- Quantity with Controls -->
                 <p class="quantity" style=" font-size: 16px;">{{item.quantity}}</p>
                 <div style="flex: 1; text-align: center;">
+                    
                     
                   <div class="quantity" style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
                       <img class="chg-quantity" src="{% static 'image/arrow-up.png' %}" style="width: 20px; height: 20px; cursor: pointer;">

@@ -27,5 +27,7 @@ urlpatterns = [
     path('store/',store, name="store"),
     path('cart/', cart, name="cart"), 
     path('checkout/',checkout, name="checkout"),
+    path('update_item/',updateItem,name="update_item"),
 ]
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
