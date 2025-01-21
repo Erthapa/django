@@ -50,17 +50,14 @@
                 </div>
 
                 <!-- Quantity with Controls -->
-                <p class="quantity" style=" font-size: 16px;">{{item.quantity}}</p>
-                <div style="flex: 1; text-align: center;">
-                    
-                    
-                  <div class="quantity" style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
-                      <img class="chg-quantity" src="{% static 'image/arrow-up.png' %}" style="width: 20px; height: 20px; cursor: pointer;">
-                      
-                      <img class="chg-quantity" src="{% static 'image/arrow-down.png' %}" style="width: 20px; height: 20px; cursor: pointer;">
-                  </div>
-              </div>
-              
+                <div style="flex:1; text-align: center;">
+                    <p class="quantity">{{item.quantity}}</p>
+                    <div class="quantity">
+                        <img data-product-id="{{item.product.id}}" data-action='add' class="chg-quantity update-cart" src="{% static  'image/arrow-up.png' %}">
+                
+                        <img data-product-id="{{item.product.id}}" data-action='remove' class="chg-quantity update-cart" src="{% static  'image/arrow-down.png' %}">
+                    </div>
+                </div>
               
                 <!-- Total -->
                 <div style="flex: 1; text-align: center;">

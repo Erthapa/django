@@ -12,7 +12,7 @@
 
         <script type="text/javascript">
             var user = '{{request.user}}'
-            var csrftoken = '{{ csrf_token }}';
+            
 
             function getToken(name) {
                 var cookieValue = null;
@@ -20,7 +20,7 @@
 		             var cookies = document.cookie.split(';');
 		             for (var i = 0; i < cookies.length; i++) {
 		                  var cookie = cookies[i].trim();
-		            // Does this cookie string begin with the name we want?
+		            
 		                  if (cookie.substring(0, name.length + 1) === (name + '=')) {
 		                       cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
 		                       break;
@@ -30,7 +30,24 @@
 		        return cookieValue;
 		    }
 		    var csrftoken = getToken('csrftoken')
-		     
+            
+            function getCookie(name) {
+                var cookieArr = document.cookie.split(";");
+                for(var i = 0; i < cookieArr.length; i++) {
+                    var cookiePair = cookieArr[i].split("=");
+                    if(name == cookiePair[0].trim()) {
+                        return decodeURIComponent(cookiePair[1]);
+                    }
+                }
+                return null;
+            }
+            var cart = JSON.parse(getCookie('cart')) 
+            if (cart == undefined){                            
+	            cart = {}
+	            
+	            document.cookie ='cart=' + JSON.stringify(cart) + ";path=/"
+            }
+            console.log('Cart:',cart)
 		 
         </script>
      </head>
@@ -53,15 +70,15 @@
                 </ul>
         
                 <!-- Right-aligned login and cart -->
-                <div class="d-flex align-items-center my-2">
+            <div class="d-flex align-items-center my-2">
                     <!-- Login Button -->
-                    <a href="#" class="btn btn-warning me-3">Login</a>
+                    <a href="{%url 'login' %}" class="btn btn-warning me-3">Login</a>
         
                     <!-- Cart Icon with Total -->
                     <a href="{% url 'cart' %}">
                         <img id="cart-icon" src="{% static 'image/cart.png' %}" >
                     </a>
-                        <p id="cart-total">0</p>
+                        <p id="cart-total">{{cartItems}}</p>
                    
                 </div>
             </div>

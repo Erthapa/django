@@ -3,15 +3,15 @@
 {% block content %}
 <div class="row ">
      <!-- User and Shipping Info Form -->
-     <div class="col-lg-6 mb-4" style=" border: 2px solid #ccc; padding: 10px; ">
-         <div class="box-element" id="form-wrapper" style="display: flex; font-weight: bold; padding: 10px 0; border-bottom: 2px solid #ddd;">
+     <div class="col-lg-6 mb-4" >
+         <div class="box-element" id="form-wrapper" style="display: flex; font-weight: bold;">
              <form id="form">
                  <div id="user-info">
                      <div class="form-field">
                          <input required class="form-control" type="text" name="name" placeholder="Name..">
                      </div>
                      <div class="form-field" style="display: flex; font-weight: bold; padding: 10px 0;"> 
-                         <input required class="form-control" type="email" name="email" placeholder="Email..">
+                         <input required class="form-control" type="number" name="number" placeholder="Number..">
                      </div>
                  </div>
                  
@@ -41,7 +41,11 @@
 
          <br>
          <div class="box-element"; id="payment-info" style=" border: 2px solid #ccc; padding: 10px;" >
-             <small>Paypal Options</small>
+            <small>Payment Options</small>
+            
+            <button type="submit">Pay with eSewa</button>
+                       
+             <button id="khalti-payment-button">Pay with Khalti</button> 
          </div>
      </div>
 
@@ -58,7 +62,7 @@
                <div style="flex: 2;">
                    <img class="img-fluid" src="{{item.product.imageURL}}" alt="Product" style="width: 80px; height: 80px; object-fit: cover; border: 1px solid #ddd; border-radius: 5px;">
                 <div style="flex:2"><p>{{item.product.name}}</p></div>
-		        <div style="flex:1"><p>${{item.product.price|floatformat:2}}</p></div>
+		        <div style="flex:1"><p>Rs.{{item.product.price|floatformat:2}}</p></div>
 		        <div style="flex:1"><p>x{{item.quantity}}</p></div>
 	
 	
@@ -73,4 +77,89 @@
 		</div>
 	</div>
 </div>
-{% endblock content %}
+<script type="text/javascript">
+    var shipping ="{{order.shipping}}"
+    var total ='{{order.get_cart_total|floatformat:2}}'
+
+    if(shipping =='False'){
+        document.getElementById('shipping-info').innerHTML = ''
+    }
+
+    if (shipping == 'False' && user !== 'AnonymousUser'){
+	//Hide entire form if user is logged in and shipping is false
+		document.getElementById('form-wrapper').classList.add("hidden");
+		//Show payment if logged in user wants to buy an item that does not require shipping
+	    document.getElementById('payment-info').classList.remove("hidden");
+}
+
+    var form = document.getElementById('form')
+	form.addEventListener('submit', function(e){
+	    e.preventDefault()
+	    console.log('Form Submitted...')
+	    document.getElementById('form-button').classList.add("hidden");
+	    document.getElementById('payment-info').classList.remove("hidden");
+	})
+    document.getElementById('esewa-payment-button').addEventListener('click',function(e){
+        submitFormData()
+    })
+
+
+    
+    document.getElementById('khalti-payment-button').addEventListener('click',function(e){
+        submitFormData()
+    })
+
+    function submitFormData(){
+        console.log("payment button clicked")
+
+        var userFormData = {
+          'name':null,
+		  'number':null,
+		  'total':total,
+	    }
+
+	    var shippingInfo = {
+	    	'address':null,
+	    	'city':null,
+	    	'state':null,
+	  	
+	    }
+
+	    if (shipping != 'False'){
+	    	shippingInfo.address = form.address.value
+        	shippingInfo.city = form.city.value
+        	shippingInfo.state = form.state.value
+        	
+	    }
+
+	    if (user == 'AnonymousUser'){
+	    	userFormData.name = form.name.value
+	    	userFormData.number = form.number.value
+	    }
+
+	    var url= '/process_order/'
+        var csrftoken = getToken('csrftoken');
+        fetch(url, {
+            method: 'POST',
+            headers:{
+                'Content-Type':'application/json',
+                'X-CSRFTOKEN':csrftoken,
+            },
+            body:JSON.stringify({'form':userFormData, 'shipping':shippingInfo})
+
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log('success:',data);
+            alert('Transaction completed');
+
+            cart = {}
+	        document.cookie ='cart=' + JSON.stringify(cart) + ";path=/"
+            window.location.href = "{% url 'store' %}"
+        })
+    }  
+        
+    
+   
+</script>
+{% endblock content %}    
