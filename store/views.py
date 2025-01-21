@@ -29,7 +29,7 @@ def checkout(request):
     order = data['order']
     items =data['items']  
 
-    context={'items':items, 'order':order,'total':order['get_cart_total']}
+    context={'items':items, 'order':order,'cartItems':cartItems, 'total':order['get_cart_total']}
     
     return render(request,'store/checkout.html',context)   
 
